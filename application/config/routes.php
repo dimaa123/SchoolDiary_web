@@ -57,6 +57,12 @@ $route['add-recent-chat'] = 'HomeController/addRecentChat';
 $route['get-recent-chats'] = 'HomeController/getRecentChats';
 $route['add-group'] = 'HomeController/addGroup';
 $route['get-groups'] = 'HomeController/getGroups';
+$route['change-group-name'] = 'HomeController/changeGroupName';
+$route['remove-members'] = 'HomeController/removeMembers';
+$route['add-members'] = 'HomeController/addMembers';
+$route['send-notification'] = 'HomeController/sendNotification';
+$route['update-token'] = 'HomeController/updateToken';
+$route['upload-picture'] = 'HomeController/uploadProfilePicture';
 
 
 $route['login'] = 'LoginController/login';

@@ -160,4 +160,118 @@ class HomeModel extends CI_Model {
         }
         echo json_encode($parentsArray);
     }
+
+    public function changeGroupName($groupObject) {
+        $condition = array('groupID' => $groupObject->groupID);
+        $data = array('groupName' => $groupObject->groupName);
+        $this->db->select('*');
+        $this->db->from('parentsGroup');
+        $this->db->where($condition);
+        $this->db->update('parentsGroup', $data);
+
+        $this->output
+                    ->set_status_header(200)
+                    ->set_content_type('application/json', 'utf-8')
+                    ->set_output(" { " . '"status"' . " : " . '"user does not exist"' . " } ")
+                    ->_display();
+            exit();
+    }
+
+    public function removeMembers($groupObject) {
+        $condition = array('groupID' => $groupObject->groupID);
+        $data = [];
+        foreach ($groupObject->users as $value) {
+            $data[] = $value->email;
+        }
+        $this->db->where($condition);
+        $this->db->where_in('email', $data);
+        $this->db->delete('groupMembers');
+    }
+
+    public function addMembers($groupObject) {
+        $groupMemberArray = [];
+        foreach ($groupObject->users as $member) {
+            $groupMemberArray[] = array('groupID' => $groupObject->groupID, 'email' => $member->email);
+        }
+        $this->db->insert_batch('groupMembers', $groupMemberArray);
+    }
+
+    public function sendNotification($notificationObject) {
+        $apiAccessKey = "AAAAwIg6XDs:APA91bFDNSqvOUDgViAZG0n_3YKZu17tEdJETCZQxz4Q6xXnwR7vYRec7dp-E4_6sFhYVvrgjcRP8SAGLJTz5q6wUqUajlLCm5OYCFByRmhA7e5FXlAtRZAtwpGcQIv8MgB_FHNz30RP";
+        
+        $notification = array (
+            'body' => "School Dairy",
+            'title' => "You got a new message.",
+            'icon' => 'myicon',
+        );
+
+        $fields = array (
+            'to' => $notificationObject->status,
+            'notification' => $notification,
+            'priority' => 'high'
+        );
+        
+        $headers = array (
+            'Authorization: key=' . $apiAccessKey,
+            'Content-Type: application/json'
+        );
+        
+        /*$jsonDataEncoded = json_encode($fields);
+        $this->curl->create('https://fcm.googleapis.com/fcm/send');
+        $this->curl->option(CURLOPT_HTTPHEADER, $headers);
+        $this->curl->post($jsonDataEncoded);
+        $result = $this->curl->execute();
+        print_r($result);*/
+
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send');
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
+        $result = curl_exec($ch);
+        curl_close($ch);
+        echo $result;        
+    }
+
+
+    public function updateToken($userObject) {
+        $condition = array("email" => $userObject->email);
+        $data = array('token' => $userObject->token);
+        if($userObject->which == "T") {
+            $this->db->select('*');
+            $this->db->from('teachers');
+            $this->db->where($condition);
+            $this->db->update('teachers', $data);
+        } else {
+            $this->db->select('*');
+            $this->db->from('parents');
+            $this->db->where($condition);
+            $this->db->update('parents', $data);
+        }  
+    }
+
+
+    public function uploadProfilePicture($profileObject) {
+        $fileName = time().$_FILES[$profileObject->file]['name'];
+        $config = array(
+            'upload_path' => "/images/",
+            'allowed_types' => "gif|jpg|png|jpeg",
+            'overwrite' => TRUE,
+            'max_size' => "2048000", // Can be set to particular file size , here it is 2 MB(2048 Kb)
+            'max_height' => "768",
+            'max_width' => "1024",
+            'file_name' => $fileName
+            );
+        //$this->load->library('upload', $config);
+        $this->upload->initialize($config);
+        if($this->upload->do_upload('file')) {
+            echo "uploded";
+        }else {
+            echo "error";
+        }
+
+    }
 }

@@ -49,4 +49,54 @@ class HomeController extends CI_Controller {
                 $this->HomeModel->getGroups($emailObject);  
         }
 
+        public function changeGroupName() {
+                $json = file_get_contents('php://input');
+                $groupObject = (object) json_decode($json);   
+                $this->HomeModel->changeGroupName($groupObject);
+        }
+
+        public function removeMembers() {
+                $json = file_get_contents('php://input');
+                $groupObject = (object) json_decode($json);   
+                $this->HomeModel->removeMembers($groupObject);  
+        }
+
+        public function addMembers() {
+                $json = file_get_contents('php://input');
+                $groupObject = (object) json_decode($json);   
+                $this->HomeModel->addMembers($groupObject);
+        }
+
+        public function sendNotification() {
+                $json = file_get_contents('php://input');
+                $notificationObject = (object) json_decode($json);   
+                $this->HomeModel->sendNotification($notificationObject);
+        }
+
+        public function updateToken() {
+                $json = file_get_contents('php://input');
+                $userObject = (object) json_decode($json);   
+                $this->HomeModel->updateToken($userObject);
+        }
+
+        public function uploadProfilePicture() {
+                $fileName = $_FILES['file']['name'];
+                $config = array(
+                    'upload_path' => "./images/",
+                    'allowed_types' => "gif|jpg|png|jpeg",
+                    'overwrite' => TRUE,
+                    'max_size' => "2048000", // Can be set to particular file size , here it is 2 MB(2048 Kb)
+                    'max_height' => "768",
+                    'max_width' => "1024",
+                    'file_name' => $fileName
+                    );
+                //$this->load->library('upload', $config);
+                $this->upload->initialize($config);
+                if($this->upload->do_upload('file')) {
+                    echo "uploded";
+                }else {
+                    echo "error";
+                }
+        }
+
 }

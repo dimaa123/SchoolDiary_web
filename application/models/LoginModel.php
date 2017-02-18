@@ -11,13 +11,24 @@ class LoginModel extends CI_Model {
             $this->db->where($condition);
             $this->db->limit(1);
             $query = $this->db->get();
-            $row = $query->row();
-            $this->output
-                        ->set_status_header(200)
+            $isExist = $query->num_rows();
+            if($isExist == 1) {
+                $row = $query->row();
+                $this->output
+                            ->set_status_header(200)
+                            ->set_content_type('application/json', 'utf-8')
+                            ->set_output(json_encode($row))
+                            ->_display();
+                    exit();
+                } else {
+                    $this->output
+                        ->set_status_header(401)
                         ->set_content_type('application/json', 'utf-8')
-                        ->set_output(json_encode($row))
+                        ->set_output(" { " . '"status"' . " : " . '"invalid username or password"' . " } ")
                         ->_display();
-                exit();
+                        exit();
+                }
+            
         } else {
             $this->output
                         ->set_status_header(401)
