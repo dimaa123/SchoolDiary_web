@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Jan 25, 2017 at 11:58 AM
+-- Generation Time: Feb 18, 2017 at 11:55 AM
 -- Server version: 5.7.17-0ubuntu0.16.04.1
 -- PHP Version: 7.0.8-0ubuntu0.16.04.3
 
@@ -66,9 +66,12 @@ CREATE TABLE `groupMembers` (
 --
 
 INSERT INTO `groupMembers` (`id`, `groupID`, `email`) VALUES
-(1, '1485247402', 'a@gmail.com'),
-(2, '1485247402', 'b@gmail.com'),
-(3, '1485247402', 'c@gmail.com');
+(4, '', 'a@gmail.com'),
+(5, '', 'c@gmail.com'),
+(6, '', 'a@gmail.com'),
+(7, '', 'c@gmail.com'),
+(8, '1485247402', 'a@gmail.com'),
+(9, '1485247402', 'c@gmail.com');
 
 -- --------------------------------------------------------
 
@@ -80,17 +83,18 @@ CREATE TABLE `parents` (
   `id` int(11) NOT NULL,
   `email` varchar(55) NOT NULL,
   `name` varchar(30) NOT NULL,
-  `password` varchar(12) NOT NULL
+  `password` varchar(12) NOT NULL,
+  `token` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `parents`
 --
 
-INSERT INTO `parents` (`id`, `email`, `name`, `password`) VALUES
-(1, 'a@gmail.com', 'A', '123'),
-(2, 'b@gmail.com', 'B', '123'),
-(3, 'c@gmail.com', 'C', '123');
+INSERT INTO `parents` (`id`, `email`, `name`, `password`, `token`) VALUES
+(1, 'a@gmail.com', 'A', '123', 'c6Slclk7f-o:APA91bFrt-jW0tZGXyYdisQxxpOM-SzPNW0nJZLL2OR04lONcEN_qG_MLVycD5y5rIxPcXBc26WQ3XyynpcWTYMKLuwLc6UwaL7vfgr7Bu_kQzDcAx5SXjblRBNDhDBHGrLf0qK5rJV2'),
+(2, 'b@gmail.com', 'B', '123', NULL),
+(3, 'c@gmail.com', 'C', '123', NULL);
 
 -- --------------------------------------------------------
 
@@ -110,7 +114,7 @@ CREATE TABLE `parentsGroup` (
 --
 
 INSERT INTO `parentsGroup` (`id`, `groupName`, `groupID`, `groupOwner`) VALUES
-(1, 'demo', '1485247402', 'x@gmail.com');
+(1, 'standard', '1485247402', 'x@gmail.com');
 
 -- --------------------------------------------------------
 
@@ -130,7 +134,8 @@ CREATE TABLE `recentChats` (
 
 INSERT INTO `recentChats` (`id`, `teacher`, `parents`) VALUES
 (1, 'x@gmail.com', 'a@gmail.com'),
-(2, 'x@gmail.com', 'b@gmail.com');
+(2, 'x@gmail.com', 'b@gmail.com'),
+(3, 'x@gmail.com', 'c@gmail.com');
 
 -- --------------------------------------------------------
 
@@ -142,17 +147,18 @@ CREATE TABLE `teachers` (
   `id` int(11) NOT NULL,
   `email` varchar(55) NOT NULL,
   `name` varchar(30) NOT NULL,
-  `password` varchar(12) NOT NULL
+  `password` varchar(12) NOT NULL,
+  `token` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `teachers`
 --
 
-INSERT INTO `teachers` (`id`, `email`, `name`, `password`) VALUES
-(1, 'x@gmail.com', 'X', '123'),
-(2, 'y@gmail.com', 'Y', '123'),
-(3, 'z@gmail.com', 'Z', '123');
+INSERT INTO `teachers` (`id`, `email`, `name`, `password`, `token`) VALUES
+(1, 'x@gmail.com', 'X', '123', 'da4UffKFf6A:APA91bHi-p1abp83vUC6ME_89mtF4YoFJ-WxfUAA5Isn3OlQb9M9KygfeZpULBMq9ZtFaUGpEV4b_irwD12H-ecJam6uRuCxRHqenuwJWoVHFMoN3j9P7FUM1mCGW___sQkUo01oJGIR'),
+(2, 'y@gmail.com', 'Y', '123', NULL),
+(3, 'z@gmail.com', 'Z', '123', NULL);
 
 --
 -- Indexes for dumped tables
@@ -207,7 +213,7 @@ ALTER TABLE `chat`
 -- AUTO_INCREMENT for table `groupMembers`
 --
 ALTER TABLE `groupMembers`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 --
 -- AUTO_INCREMENT for table `parents`
 --
@@ -222,7 +228,7 @@ ALTER TABLE `parentsGroup`
 -- AUTO_INCREMENT for table `recentChats`
 --
 ALTER TABLE `recentChats`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT for table `teachers`
 --
